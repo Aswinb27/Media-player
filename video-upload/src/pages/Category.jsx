@@ -13,9 +13,7 @@ import Videocard from './Videocard';
 
 
 
-
 function Category() {
-
   const[allCategory,setallCategory]=useState([])
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -25,14 +23,16 @@ function Category() {
     name:"",
     allVideos:[]
   })
+
   const addcategoryForm=(e)=>{
     const{name,value}=e.target
     setcategoryItem({...categoryItem,[name]:value})
   }
+
   console.log(categoryItem);
   const handleAddCategory=async(e)=>{
     e.preventDefault()
-
+ 
     // destructure
 
     const{id,name}=categoryItem
@@ -47,13 +47,15 @@ function Category() {
       setShow(false)
     }
   }
-  // get all categories
 
+  // get all categories
+ 
   const getcategoryList=async()=>{
     const response=await getallCategories()
-    console.log(response.data);
-    setallCategory(response.data)
+    console.log(response?.data,"response?.data/////////////////////");
+    setallCategory(response?.data)
   }
+
   console.log(allCategory);
   useEffect(() => {
     getcategoryList()
@@ -64,31 +66,32 @@ function Category() {
     await deleteCategories(id)
     getcategoryList()
   }
+
   const dragover=e=>{
     e.preventDefault()
     console.log("dragging over the category board!!!");
   }
   const dropped=async(e,categoryId)=>{
-    console.log(categoryId);
+
     let sourceCardId=e.dataTransfer.getData("cardId")
-    console.log("source card id",sourceCardId);
+    console.log("source card id",sourceCardId); 
 
     // logic to implement adding card in the given category
+    
+   let {data}= await getVideos(sourceCardId) 
 
-   let {data}= await getVideos(sourceCardId)
-
-   console.log(data);
 
   console.log('source video data',data);
   let selectedCategory=allCategory.find(item=>item.id==categoryId)
+
   console.log("target category details",selectedCategory);
   selectedCategory.allVideos.push(data)
   
   console.log(('updated target category details',selectedCategory));
-
+  
   await updateCategory(categoryId,selectedCategory)
 
-  getcategoryList()
+  getcategoryList() 
 
 
 
